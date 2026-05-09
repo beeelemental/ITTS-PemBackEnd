@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+            </nav>
+        </header>
+        <main>
+            <h1>{{ message }}</h1>
+            <p>Aplikasi web sederhana menggunakan <strong>Flask 3.1.3</strong> & <strong>Python 3.13</strong></p>
+        </main>
+        <footer>
+            <p>Tugas 1 — Pemrograman Back-End | Budi Slamet Riyadi</p>
+        </footer>
+    </div>
+</body>
+</html>
