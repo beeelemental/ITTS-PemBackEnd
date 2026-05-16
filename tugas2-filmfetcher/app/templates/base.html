@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FilmFetcher{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="{{ url_for('main.index') }}">🎬 FilmFetcher</a>
+        </div>
+        <div class="navbar-links">
+            <a href="{{ url_for('main.index') }}"
+               class="{{ 'active' if request.endpoint == 'main.index' else '' }}">Home</a>
+            <a href="{{ url_for('discover.discover') }}"
+               class="{{ 'active' if request.endpoint == 'discover.discover' else '' }}">Discover</a>
+            <a href="{{ url_for('main.about') }}"
+               class="{{ 'active' if request.endpoint == 'main.about' else '' }}">About</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>🎬 <strong>FilmFetcher</strong> — Powered by
+               <a href="https://www.themoviedb.org/" target="_blank">TMDB API</a></p>
+            <p>Back-End Programming Assignment | Institut Teknologi Tangerang Selatan</p>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

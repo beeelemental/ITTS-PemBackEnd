@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}FilmFetcher — Home{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Discover Your Next Favorite Film</h1>
+        <p>Explore trending movies, top-rated classics, and discover films by genre, actor, rating and more.</p>
+        <a href="{{ url_for('discover.discover') }}" class="btn-hero">🔍 Discover Films</a>
+    </div>
+</section>
+
+<!-- Trending -->
+<section class="movie-section">
+    <h2 class="section-title">
+        <span class="badge badge-red">🔥 Trending</span> Today
+    </h2>
+    <div class="movie-row">
+        {% for movie in trending %}
+        <div class="movie-card">
+            <a href="{{ url_for('film.film_detail', movie_id=movie.id) }}">
+                {% if movie.poster_path %}
+                    <img src="{{ image_base }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% else %}
+                    <div class="no-poster">🎬</div>
+                {% endif %}
+                <div class="card-overlay">
+                    <h3>{{ movie.title }}</h3>
+                    <div class="card-meta">
+                        <span class="rating">⭐ {{ "%.1f"|format(movie.vote_average) }}</span>
+                        <span class="year">{{ movie.release_date[:4] if movie.release_date else 'N/A' }}</span>
+                    </div>
+                    <p class="card-overview">{{ movie.overview[:90] }}...</p>
+                    <span class="btn-card">View Reviews</span>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Top Rated -->
+<section class="movie-section">
+    <h2 class="section-title">
+        <span class="badge badge-gold">⭐ Top Rated</span> All Time
+    </h2>
+    <div class="movie-row">
+        {% for movie in top_rated %}
+        <div class="movie-card">
+            <a href="{{ url_for('film.film_detail', movie_id=movie.id) }}">
+                {% if movie.poster_path %}
+                    <img src="{{ image_base }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% else %}
+                    <div class="no-poster">🎬</div>
+                {% endif %}
+                <div class="card-overlay">
+                    <h3>{{ movie.title }}</h3>
+                    <div class="card-meta">
+                        <span class="rating">⭐ {{ "%.1f"|format(movie.vote_average) }}</span>
+                        <span class="year">{{ movie.release_date[:4] if movie.release_date else 'N/A' }}</span>
+                    </div>
+                    <p class="card-overview">{{ movie.overview[:90] }}...</p>
+                    <span class="btn-card">View Reviews</span>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Popular -->
+<section class="movie-section">
+    <h2 class="section-title">
+        <span class="badge badge-blue">🎭 Popular</span> Right Now
+    </h2>
+    <div class="movie-row">
+        {% for movie in popular %}
+        <div class="movie-card">
+            <a href="{{ url_for('film.film_detail', movie_id=movie.id) }}">
+                {% if movie.poster_path %}
+                    <img src="{{ image_base }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                {% else %}
+                    <div class="no-poster">🎬</div>
+                {% endif %}
+                <div class="card-overlay">
+                    <h3>{{ movie.title }}</h3>
+                    <div class="card-meta">
+                        <span class="rating">⭐ {{ "%.1f"|format(movie.vote_average) }}</span>
+                        <span class="year">{{ movie.release_date[:4] if movie.release_date else 'N/A' }}</span>
+                    </div>
+                    <p class="card-overview">{{ movie.overview[:90] }}...</p>
+                    <span class="btn-card">View Reviews</span>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

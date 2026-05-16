@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block title %}FilmFetcher — Discover{% endblock %}
+
+{% block content %}
+<div class="discover-page">
+    <h1 class="page-title">🔍 Discover Films</h1>
+
+    <div class="discover-layout">
+
+        <!-- FILTER PANEL -->
+        <aside class="filter-panel">
+            <h2 class="filter-title">Filters</h2>
+            <form action="{{ url_for('discover.discover') }}" method="GET">
+                <input type="hidden" name="search" value="1">
+
+                <!-- Actors -->
+                <div class="filter-group">
+                    <div class="filter-header" onclick="toggleFilter('actor-panel')">
+                        <span>Actors (any)</span><span class="arrow">›</span>
+                    </div>
+                    <div class="filter-body" id="actor-panel">
+                        <div class="actor-search-wrapper">
+                            <input type="text" id="actor-input"
+                                   placeholder="Search by name" autocomplete="off">
+                            <input type="hidden" name="actor_id"
+                                   id="actor-id-input" value="{{ actor_id }}">
+                            <input type="hidden" name="actor_name"
+                                   id="actor-name-input" value="{{ actor_name }}">
+                            <div id="actor-dropdown" class="actor-dropdown"></div>
+                        </div>
+                        <div class="selected-actor" id="selected-actor"
+                             style="{{ '' if actor_name else 'display:none' }}">
+                            <span id="selected-actor-name">{{ actor_name }}</span>
+                            <button type="button" onclick="clearActor()">×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Genres -->
+                <div class="filter-group">
+                    <div class="filter-header" onclick="toggleFilter('genre-panel')">
+                        <span>Genres (any)</span><span class="arrow">›</span>
+                    </div>
+                    <div class="filter-body" id="genre-panel">
+                        <div class="genre-chips">
+                            {% for genre in genres %}
+                            <label class="genre-chip {{ 'active' if genre.id|string in selected_genres else '' }}">
+                                <input type="checkbox" name="genres"
+                                       value="{{ genre.id }}"
+                                       {{ 'checked' if genre.id|string in selected_genres else '' }}>
+                                {{ genre.name }}
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Release Year -->
+                <div class="filter-group">
+                    <div class="filter-header" onclick="toggleFilter('release-panel')">
+                        <span>Release Year</span><span class="arrow">›</span>
+                    </div>
+                    <div class="filter-body" id="release-panel">
+                        <div class="year-range">
+                            <input type="number" name="release_from"
+                                   placeholder="From" min="1900" max="2026"
+                                   value="{{ release_from }}" class="year-input">
+                            <span>—</span>
+                            <input type="number" name="release_to"
+                                   placeholder="To" min="1900" max="2026"
+                                   value="{{ release_to }}" class="year-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rating -->
+                <div class="filter-group">
+                    <div class="filter-header" onclick="toggleFilter('rating-panel')">
+                        <span>Rating (min)</span><span class="arrow">›</span>
+                    </div>
+                    <div class="filter-body" id="rating-panel">
+                        <div class="rating-slider">
+                            <input type="range" name="rating_min"
+                                   min="0" max="10" step="0.5"
+                                   value="{{ rating_min or 0 }}"
+                                   id="rating-slider">
+                            <span id="rating-val">{{ rating_min or 0 }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sort By -->
+                <div class="filter-group">
+                    <div class="filter-header" onclick="toggleFilter('sort-panel')">
+                        <span>Sort By</span><span class="arrow">›</span>
+                    </div>
+                    <div class="filter-body" id="sort-panel">
+                        <select name="sort_by" class="sort-select">
+                            <option value="popularity.desc"
+                                {{ 'selected' if sort_by == 'popularity.desc' }}>Popularity ↓</option>
+                            <option value="popularity.asc"
+                                {{ 'selected' if sort_by == 'popularity.asc' }}>Popularity ↑</option>
+                            <option value="vote_average.desc"
+                                {{ 'selected' if sort_by == 'vote_average.desc' }}>Rating ↓</option>
+                            <option value="vote_average.asc"
+                                {{ 'selected' if sort_by == 'vote_average.asc' }}>Rating ↑</option>
+                            <option value="release_date.desc"
+                                {{ 'selected' if sort_by == 'release_date.desc' }}>Release Date ↓</option>
+                            <option value="release_date.asc"
+                                {{ 'selected' if sort_by == 'release_date.asc' }}>Release Date ↑</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-search">🔍 Search Films</button>
+            </form>
+        </aside>
+
+        <!-- RESULTS PANEL -->
+        <div class="results-panel">
+            {% if movies %}
+            <div class="results-header">
+                <p>Found <strong>{{ total | int }}</strong> films</p>
+                <a href="/export?{{ query_string }}" class="btn-export">📤 Export CSV</a>
+            </div>
+            <div class="results-grid">
+                {% for movie in movies %}
+                <div class="movie-card">
+                    <a href="{{ url_for('film.film_detail', movie_id=movie.id) }}">
+                        {% if movie.poster_path %}
+                            <img src="{{ image_base }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+                        {% else %}
+                            <div class="no-poster">🎬</div>
+                        {% endif %}
+                        <div class="card-overlay">
+                            <h3>{{ movie.title }}</h3>
+                            <div class="card-meta">
+                                <span class="rating">⭐ {{ "%.1f"|format(movie.vote_average) }}</span>
+                                <span class="year">{{ movie.release_date[:4] if movie.release_date else 'N/A' }}</span>
+                            </div>
+                            <p class="card-overview">{{ movie.overview[:80] }}...</p>
+                            <span class="btn-card">View Reviews</span>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% elif query_string %}
+            <div class="empty-state">
+                <div class="icon">🎬</div>
+                <h3>No films found</h3>
+                <p>Try adjusting your filters for more results.</p>
+            </div>
+
+            {% else %}
+            <div class="empty-state">
+                <div class="icon">🔍</div>
+                <h3>Set your filters and search</h3>
+                <p>Use the filters on the left to discover films tailored to your taste.</p>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/actor_search.js') }}"></script>
+{% endblock %}

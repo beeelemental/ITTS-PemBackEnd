@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}About — FilmFetcher{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <h1>🎬 About FilmFetcher</h1>
+    <p class="subtitle">Back-End Programming Assignment — Institut Teknologi Tangerang Selatan</p>
+
+    <!-- Team -->
+    <div class="about-card">
+        <h2>👥 Kelompok 2</h2>
+        <div class="team-list">
+            <div class="team-member">
+                <div class="member-avatar">B</div>
+                <div class="member-info">
+                    <span class="member-name">Budi Slamet Riyadi</span>
+                    <span class="member-nim">NIM: 1003240034</span>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="member-avatar">Y</div>
+                <div class="member-info">
+                    <span class="member-name">Yedija P</span>
+                    <span class="member-nim">NIM: 1003250073</span>
+                </div>
+            </div>
+            <div class="team-member">
+                <div class="member-avatar">T</div>
+                <div class="member-info">
+                    <span class="member-name">Tarmidi Jaelani</span>
+                    <span class="member-nim">NIM: 1003240052</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Info -->
+    <div class="about-card">
+        <h2>🔌 API Information</h2>
+        <div class="api-info">
+            <div class="api-item">
+                <div class="label">API Provider</div>
+                <div class="value">
+                    https://www.themoviedb.org
+                </div>
+            </div>
+            <div class="api-item">
+                <div class="label">API Version</div>
+                <div class="value">v3</div>
+            </div>
+            <div class="api-item">
+                <div class="label">Framework</div>
+                <div class="value">Python Flask 3.1.3</div>
+            </div>
+            <div class="api-item">
+                <div class="label">Python Version</div>
+                <div class="value">3.13.0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="about-card">
+        <h2>✨ Features</h2>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+            {% for f in [
+                ('🔥', 'Trending Movies', 'Real-time trending films updated daily'),
+                ('⭐', 'Top Rated', 'Highest rated films of all time'),
+                ('🎭', 'Popular', 'Currently popular movies worldwide'),
+                ('🔍', 'Advanced Discover', 'Filter by genre, actor, release year, rating & popularity'),
+                ('👤', 'Actor Search', 'Autocomplete actor search with photo'),
+                ('💬', 'Reviews', 'Read audience reviews per movie'),
+                ('📤', 'Export CSV', 'Download movie or review data as CSV')
+            ] %}
+            <div style="display:flex;align-items:flex-start;gap:14px;padding:12px;
+                        background:var(--bg-card);border-radius:var(--radius);">
+                <span style="font-size:1.4rem;">{{ f[0] }}</span>
+                <div>
+                    <div style="font-weight:700;font-size:0.9rem;margin-bottom:2px;">
+                        {{ f[1] }}
+                    </div>
+                    <div style="font-size:0.8rem;color:var(--text-muted);">{{ f[2] }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

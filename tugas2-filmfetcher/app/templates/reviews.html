@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}{{ movie.title }} — FilmFetcher{% endblock %}
+
+{% block content %}
+<div class="reviews-page">
+
+    <a href="javascript:history.back()" class="back-link">← Back</a>
+
+    <!-- Movie Hero -->
+    <div class="movie-hero">
+        <div class="movie-poster">
+            {% if movie.poster_path %}
+                <img src="{{ image_base }}{{ movie.poster_path }}" alt="{{ movie.title }}">
+            {% else %}
+                <div class="no-poster" style="height:360px;">🎬</div>
+            {% endif %}
+        </div>
+
+        <div class="movie-info">
+            <h1>{{ movie.title }}</h1>
+
+            {% if movie.tagline %}
+                <p class="movie-tagline">"{{ movie.tagline }}"</p>
+            {% endif %}
+
+            <div class="movie-stats">
+                <div class="stat">
+                    <span class="stat-label">Rating</span>
+                    <span class="stat-value gold">⭐ {{ "%.1f"|format(movie.vote_average) }}/10</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-label">Votes</span>
+                    <span class="stat-value">{{ "{:,}".format(movie.vote_count) }}</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-label">Release</span>
+                    <span class="stat-value">{{ movie.release_date[:4] if movie.release_date else 'N/A' }}</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-label">Runtime</span>
+                    <span class="stat-value">{{ movie.runtime }} min</span>
+                </div>
+
+                <div class="stat">
+                    <span class="stat-label">Popularity</span>
+                    <span class="stat-value">🔥 {{ "%.0f"|format(movie.popularity) }}</span>
+                </div>
+            </div>
+
+            {% if movie.genres %}
+            <div class="genre-tags">
+                {% for genre in movie.genres %}
+                    <span class="genre-tag">{{ genre.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if movie.overview %}
+            <p class="movie-overview">{{ movie.overview }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="reviews-section">
+        <div class="reviews-header">
+            <h2>💬 Reviews ({{ reviews|length }})</h2>
+            <a href="{{ url_for('film.export_reviews', movie_id=movie.id) }}" class="btn-export">
+                📤 Export CSV
+            </a>
+        </div>
+
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="review-meta">
+                    <div class="reviewer-info">
+                        <div class="reviewer-avatar">
+                            {{ review.author[0].upper() if review.author else '?' }}
+                        </div>
+                        <div>
+                            <div class="reviewer-name">{{ review.author or 'Anonymous' }}</div>
+                            <div class="reviewer-date">
+                                {{ review.created_at[:10] if review.created_at else 'N/A' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if review.author_details and review.author_details.rating %}
+                        <div class="review-rating">
+                            ⭐ {{ review.author_details.rating }}/10
+                        </div>
+                    {% endif %}
+                </div>
+
+                <p class="review-content">{{ review.content }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-reviews">
+                <h3>No reviews yet</h3>
+                <p>This movie doesn't have any reviews on TMDB.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
