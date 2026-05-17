@@ -101,3 +101,12 @@ http://127.0.0.1:5000
 
 ### Export File .csv
 ![export](screenshots/export.png)
+
+## 🎥 Demonstration of FilmFetcher Application
+
+Click the image below to watch the presentation:
+<p align="center">
+  <a href="https://sekolahauliyaschid-my.sharepoint.com/:v:/g/personal/admin_sekolahauliya_sch_id/IQB2zcYtpEBIS7gTqkVOMxJhAcWcAvhlMedT_g6wibmW0UY">
+    <img src="screenshots/presentation.png" alt="FilmFetcher Presentation Video" width="600">
+  </a>
+</p>
